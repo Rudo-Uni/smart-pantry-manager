@@ -1,24 +1,44 @@
 package com.rudo.smartpantry;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.rudo.smartpantry.data.PantryDataSource;
 import com.rudo.smartpantry.model.PantryItem;
-import com.rudo.smartpantry.model.Recipe;
-import com.rudo.smartpantry.util.RecipeMatcher;
+import com.rudo.smartpantry.ui.AddEditItemActivity;
+import com.rudo.smartpantry.ui.NavBarHelper;
+import com.rudo.smartpantry.ui.PantryAdapter;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * The pantry list, and the app's launcher screen.
+ *
+ * Shows every ingredient the user currently has, and is the starting point for
+ * adding, editing and deleting them. The list is refreshed in onResume rather
+ * than only in onCreate, so returning from the add or edit screen always shows
+ * current data without needing a result callback.
+ */
+public class MainActivity extends AppCompatActivity implements PantryAdapter.OnItemActionListener {
 
-    private static final String TAG = "SmartPantry";
+    private PantryDataSource dataSource;
+    private PantryAdapter adapter;
+    private RecyclerView recyclerView;
+    private TextView emptyMessage;
+    private TextView countLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,63 +51,74 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        runMatcherVerification();
+        dataSource = new PantryDataSource(this);
+
+        recyclerView = findViewById(R.id.recyclerPantry);
+        emptyMessage = findViewById(R.id.txtPantryEmpty);
+        countLabel = findViewById(R.id.txtPantryCount);
+
+        adapter = new PantryAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        Button addButton = findViewById(R.id.btnAddItem);
+        addButton.setOnClickListener(v ->
+                startActivity(new Intent(this, AddEditItemActivity.class)));
+
+        NavBarHelper.setup(this, NavBarHelper.Screen.PANTRY);
     }
 
-    /** Temporary verification of the matching engine. Removed once the UI exists. */
-    private void runMatcherVerification() {
-        PantryDataSource dataSource = new PantryDataSource(this);
+    /**
+     * The database is opened here and closed in onPause, so the connection is
+     * only held while this screen is actually in front of the user.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
         dataSource.open();
+        refreshList();
+    }
 
-        Log.i(TAG, "Recipes seeded: " + dataSource.getRecipeCount());
-
-        // Start from a clean pantry so repeated runs give the same result.
-        for (PantryItem existing : dataSource.getAllPantryItems()) {
-            dataSource.deletePantryItem(existing.getId());
-        }
-
-        dataSource.insertPantryItem(new PantryItem("Bread", 6, "slice"));
-        dataSource.insertPantryItem(new PantryItem("Cheddar Cheese", 0.1, "kg"));
-        dataSource.insertPantryItem(new PantryItem("Butter", 250, "g"));
-        dataSource.insertPantryItem(new PantryItem("Large Eggs", 6, ""));
-        dataSource.insertPantryItem(new PantryItem("Milk", 1, "l"));
-        dataSource.insertPantryItem(new PantryItem("Salt", 500, "g"));
-
-        List<Recipe> recipes = dataSource.getAllRecipesWithIngredients();
-        List<PantryItem> pantry = dataSource.getAllPantryItems();
-
-        Log.i(TAG, "--- Pantry (" + pantry.size() + " items) ---");
-        for (PantryItem item : pantry) {
-            Log.i(TAG, "   " + item.getName() + " -> '" + item.getNameNormalised()
-                    + "' " + item.getDisplayQuantity());
-        }
-
-        List<Recipe> suggested = RecipeMatcher.findSuggestedRecipes(recipes, pantry);
-        Log.i(TAG, "--- Suggested: " + suggested.size() + " of " + recipes.size() + " ---");
-        for (Recipe recipe : suggested) {
-            Log.i(TAG, "   MATCH: " + recipe.getName());
-        }
-
-        List<RecipeMatcher.MatchResult> almost = RecipeMatcher.findAlmostThere(recipes, pantry);
-        Log.i(TAG, "--- Almost there: " + almost.size() + " ---");
-        for (RecipeMatcher.MatchResult result : almost) {
-            Log.i(TAG, "   NEEDS " + result.getOnlyMissingIngredient().getName()
-                    + ": " + result.getRecipe().getName());
-        }
-
-        // Remove the butter and confirm the strict rule drops what depends on it.
-        for (PantryItem item : pantry) {
-            if (item.getNameNormalised().equals("butter")) {
-                dataSource.deletePantryItem(item.getId());
-            }
-        }
-        List<Recipe> afterRemoval = RecipeMatcher.findSuggestedRecipes(
-                recipes, dataSource.getAllPantryItems());
-        Log.i(TAG, "--- After removing butter: " + afterRemoval.size() + " ---");
-        for (Recipe recipe : afterRemoval) {
-            Log.i(TAG, "   MATCH: " + recipe.getName());
-        }
-
+    @Override
+    protected void onPause() {
+        super.onPause();
         dataSource.close();
+    }
+
+    /** Reloads from the database and switches between the list and the empty message. */
+    private void refreshList() {
+        List<PantryItem> items = dataSource.getAllPantryItems();
+        adapter.setItems(items);
+
+        boolean isEmpty = items.isEmpty();
+        emptyMessage.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        countLabel.setText(getString(R.string.pantry_count, items.size()));
+    }
+
+    /** Tapping a row opens it for editing, identified by its database id. */
+    @Override
+    public void onItemClicked(PantryItem item) {
+        Intent intent = new Intent(this, AddEditItemActivity.class);
+        intent.putExtra(AddEditItemActivity.EXTRA_ITEM_ID, item.getId());
+        startActivity(intent);
+    }
+
+    /** Deletion is confirmed first, since it cannot be undone. */
+    @Override
+    public void onDeleteClicked(PantryItem item) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_item_title)
+                .setMessage(getString(R.string.delete_item_message, item.getName()))
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                    if (dataSource.deletePantryItem(item.getId())) {
+                        Toast.makeText(this,
+                                getString(R.string.item_deleted, item.getName()),
+                                Toast.LENGTH_SHORT).show();
+                        refreshList();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 }
