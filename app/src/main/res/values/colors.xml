@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Smart Pantry palette -->
+    <color name="primary">#2D6A4F</color>
+    <color name="primary_dark">#1B4332</color>
+    <color name="accent">#B7793B</color>
+    <color name="background">#F5F3EF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#1F2933</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="divider">#E2E0DA</color>
+    <color name="danger">#C1121F</color>
+    <color name="nav_background">#FFFFFF</color>
 </resources>
