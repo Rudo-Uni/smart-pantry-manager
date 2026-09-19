@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.util.Log;
+import com.rudo.smartpantry.data.PantryDataSource;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,5 +22,11 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        PantryDataSource dataSource = new PantryDataSource(this);
+        dataSource.open();
+        Log.i("SmartPantry", "Recipes seeded: " + dataSource.getRecipeCount());
+        Log.i("SmartPantry", "Pantry items: " + dataSource.getPantryItemCount());
+        dataSource.close();
     }
 }
