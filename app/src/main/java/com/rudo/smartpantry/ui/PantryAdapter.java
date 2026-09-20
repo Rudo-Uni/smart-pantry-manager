@@ -74,10 +74,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         notifyDataSetChanged();
     }
 
-    public boolean isEmpty() {
-        return items.isEmpty();
-    }
-
     @NonNull
     @Override
     public PantryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

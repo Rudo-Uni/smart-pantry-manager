@@ -4,11 +4,9 @@ import com.rudo.smartpantry.util.IngredientNormaliser;
 
 /**
  * A single ingredient currently held in the user's pantry.
- *
  * The id defaults to -1 so that calling code can distinguish a newly created
  * item (which must be inserted) from one loaded out of the database (which
  * must be updated).
- *
  * Two forms of the name are kept. The display name preserves whatever the user
  * typed, while the normalised name is the lower-cased, singular, filler-free
  * form used by the strict-matching rule. Normalising on write keeps the match
@@ -104,13 +102,6 @@ public class PantryItem {
     }
 
     /**
-     * True when this item is new and has not yet been written to the database.
-     */
-    public boolean isNew() {
-        return id == -1;
-    }
-
-    /**
      * Convenience for list rows, e.g. "500 g" or "3" when there is no unit.
      */
     public String getDisplayQuantity() {
@@ -124,4 +115,3 @@ public class PantryItem {
     }
 
 }
-

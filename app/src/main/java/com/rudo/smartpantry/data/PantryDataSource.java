@@ -43,10 +43,6 @@ public class PantryDataSource {
         dbHelper.close();
     }
 
-    public boolean isOpen() {
-        return database != null && database.isOpen();
-    }
-
     // Pantry items: create, read, update, delete
 
     /**
@@ -170,10 +166,6 @@ public class PantryDataSource {
         return exists;
     }
 
-    public int getPantryItemCount() {
-        return countRows(PantryDBHelper.TABLE_PANTRY_ITEM);
-    }
-
     // Recipes: read only, since the collection is seeded rather than edited
 
     /**
@@ -255,10 +247,6 @@ public class PantryDataSource {
             closeCursor(cursor);
         }
         return ingredients;
-    }
-
-    public int getRecipeCount() {
-        return countRows(PantryDBHelper.TABLE_RECIPE);
     }
 
     // Internal helpers
@@ -359,22 +347,6 @@ public class PantryDataSource {
         ingredient.setUnit(cursor.getString(
                 cursor.getColumnIndexOrThrow(PantryDBHelper.COL_INGREDIENT_UNIT)));
         return ingredient;
-    }
-
-    private int countRows(String tableName) {
-        int count = 0;
-        Cursor cursor = null;
-        try {
-            cursor = database.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
-            if (cursor.moveToFirst()) {
-                count = cursor.getInt(0);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to count rows in " + tableName, e);
-        } finally {
-            closeCursor(cursor);
-        }
-        return count;
     }
 
     /** Cursors hold native resources and leak if they are not closed. */

@@ -7,11 +7,9 @@ import android.util.Log;
 
 /**
  * Creates and upgrades the Smart Pantry database.
- *
  * Following the pattern taught in the module, this class does nothing except
  * define the tables and react to version changes. Opening, closing and
  * querying all live in PantryDataSource.
- *
  * Three tables are used. Recipe ingredients are held in their own table rather
  * than as a delimited column on the recipe, because the strict-matching rule
  * has to examine each required ingredient individually.

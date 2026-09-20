@@ -5,18 +5,15 @@ import com.rudo.smartpantry.model.Recipe;
 import com.rudo.smartpantry.model.RecipeIngredient;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Decides which recipes the user can cook right now.
- *
  * The rule is strict: a recipe qualifies only when every ingredient it
  * requires is present in the pantry in at least the required quantity. A
  * recipe missing even one ingredient is excluded, no matter how close it is.
- *
  * Matching happens in two stages. Names are compared in their normalised form
  * so that trivial differences in spelling do not break a match, and quantities
  * are converted to a common base unit so that 500 g satisfies a requirement
@@ -47,10 +44,6 @@ public final class RecipeMatcher {
             return recipe;
         }
 
-        public List<RecipeIngredient> getMissingIngredients() {
-            return Collections.unmodifiableList(missingIngredients);
-        }
-
         public int getMissingCount() {
             return missingIngredients.size();
         }
@@ -68,7 +61,6 @@ public final class RecipeMatcher {
 
     /**
      * Recipes the user can make right now, in alphabetical order.
-     *
      * This is the list shown on the Suggested Recipes screen and the method
      * the strict-matching rule is judged on.
      */
@@ -85,7 +77,6 @@ public final class RecipeMatcher {
 
     /**
      * Recipes that would qualify if the user had one more ingredient.
-     *
      * Kept deliberately separate from the suggestions so that a recipe which
      * is merely close can never appear in the strict list.
      */
@@ -102,7 +93,6 @@ public final class RecipeMatcher {
 
     /**
      * Tests every recipe against the pantry.
-     *
      * The pantry is indexed once up front rather than being searched again for
      * each ingredient, which keeps the work proportional to the number of
      * ingredients rather than to pantry size multiplied by ingredient count.

@@ -55,6 +55,16 @@ public class AddEditItemActivity extends AppCompatActivity {
     private int itemId = -1;
     private long expiryDate = PantryItem.NO_EXPIRY;
 
+    /**
+     * Whether the form has already been populated from the database.
+     *
+     * onResume runs again whenever the user returns to this screen, for
+     * instance after visiting another destination from the navigation bar.
+     * Reloading at that point would silently discard anything they had
+     * already typed, so the form is only filled the first time.
+     */
+    private boolean formLoaded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +105,11 @@ public class AddEditItemActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dataSource.open();
-        if (itemId != -1) {
+
+        if (itemId != -1 && !formLoaded) {
             loadExistingItem();
-        } else {
+            formLoaded = true;
+        } else if (itemId == -1) {
             updateExpiryLabel();
         }
     }
