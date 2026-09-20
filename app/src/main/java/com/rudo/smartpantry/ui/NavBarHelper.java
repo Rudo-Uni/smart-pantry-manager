@@ -12,14 +12,10 @@ import com.rudo.smartpantry.R;
 
 /**
  * Wires up the bottom navigation bar that every screen includes.
- *
  * The same three listeners would otherwise be repeated in each activity, so
  * they are set from one place here. The current screen's button is tinted and
  * does nothing when tapped, which avoids stacking a second copy of a screen
  * the user is already looking at.
- *
- * The settings destination is not yet built, so its button is shown but
- * disabled and is connected once that screen exists.
  */
 public final class NavBarHelper {
 
@@ -45,42 +41,12 @@ public final class NavBarHelper {
                 current == Screen.PANTRY, MainActivity.class);
         bind(activity, R.id.btnNavRecipes, R.id.lblNavRecipes,
                 current == Screen.RECIPES, SuggestedRecipesActivity.class);
-
-        // Not yet built, so this is visible but inactive rather than silently
-        // doing nothing when tapped.
-        tint(activity, R.id.btnNavSettings, R.id.lblNavSettings, false);
-        ImageButton settings = activity.findViewById(R.id.btnNavSettings);
-        if (settings != null) {
-            settings.setEnabled(false);
-            settings.setAlpha(0.4f);
-        }
+        bind(activity, R.id.btnNavSettings, R.id.lblNavSettings,
+                current == Screen.SETTINGS, SettingsActivity.class);
     }
 
     private static void bind(Activity activity, int buttonId, int labelId,
                              boolean isCurrent, Class<?> destination) {
-        ImageButton button = activity.findViewById(buttonId);
-        if (button == null) {
-            return;
-        }
-
-        tint(activity, buttonId, labelId, isCurrent);
-
-        if (isCurrent) {
-            // Already here, so the tap does nothing.
-            button.setOnClickListener(v -> { });
-            return;
-        }
-
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(activity, destination);
-            // Reuse the existing instance instead of stacking copies of a
-            // screen the user has already visited.
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            activity.startActivity(intent);
-        });
-    }
-
-    private static void tint(Activity activity, int buttonId, int labelId, boolean isCurrent) {
         ImageButton button = activity.findViewById(buttonId);
         TextView label = activity.findViewById(labelId);
         if (button == null) {
@@ -93,5 +59,18 @@ public final class NavBarHelper {
         if (label != null) {
             label.setTextColor(colour);
         }
+
+        if (isCurrent) {
+            button.setOnClickListener(v -> { });
+            return;
+        }
+
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(activity, destination);
+            // Reuse the existing instance instead of stacking copies of a
+            // screen the user has already visited.
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            activity.startActivity(intent);
+        });
     }
 }
