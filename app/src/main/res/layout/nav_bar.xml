@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Bottom navigation bar, included at the foot of every screen so that the
-    same three destinations are always reachable.
+    same three destinations are always reachable. The active destination is
+    tinted and sits on a rounded highlight.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/nav_background"
-    android:elevation="8dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp">
+    android:background="@drawable/bg_nav"
+    android:elevation="12dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -21,18 +22,19 @@
 
         <ImageButton
             android:id="@+id/btnNavPantry"
-            android:layout_width="48dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="56dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_nav_active"
             android:contentDescription="@string/nav_pantry"
             android:src="@drawable/ic_pantry"
             android:scaleType="fitCenter"
-            android:padding="8dp" />
+            android:padding="7dp" />
 
         <TextView
             android:id="@+id/lblNavPantry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="@string/nav_pantry"
             android:textSize="11sp"
             android:textColor="@color/text_secondary" />
@@ -47,18 +49,19 @@
 
         <ImageButton
             android:id="@+id/btnNavRecipes"
-            android:layout_width="48dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="56dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_nav_active"
             android:contentDescription="@string/nav_recipes"
             android:src="@drawable/ic_recipes"
             android:scaleType="fitCenter"
-            android:padding="8dp" />
+            android:padding="7dp" />
 
         <TextView
             android:id="@+id/lblNavRecipes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="@string/nav_recipes"
             android:textSize="11sp"
             android:textColor="@color/text_secondary" />
@@ -73,18 +76,19 @@
 
         <ImageButton
             android:id="@+id/btnNavSettings"
-            android:layout_width="48dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="56dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_nav_active"
             android:contentDescription="@string/nav_settings"
             android:src="@drawable/ic_settings"
             android:scaleType="fitCenter"
-            android:padding="8dp" />
+            android:padding="7dp" />
 
         <TextView
             android:id="@+id/lblNavSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="@string/nav_settings"
             android:textSize="11sp"
             android:textColor="@color/text_secondary" />

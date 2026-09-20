@@ -10,14 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/primary"
-        android:padding="16dp">
+        android:background="@drawable/bg_header"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/suggested_subtitle"
+            android:textSize="13sp"
+            android:textColor="@color/header_subtle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:text="@string/title_suggested"
-            android:textSize="22sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="@color/white" />
 
@@ -25,16 +36,24 @@
             android:id="@+id/txtMatchCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_card_dark"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:textSize="13sp"
-            android:textColor="#CFE3D8" />
+            android:textStyle="bold"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
         android:clipToPadding="false">
 
         <LinearLayout
@@ -48,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="24dp"
+                android:lineSpacingExtra="4dp"
                 android:text="@string/no_matches"
                 android:textSize="15sp"
                 android:textColor="@color/text_secondary"
@@ -57,9 +77,9 @@
                 android:id="@+id/headerCanMake"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/header_can_make"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />
 
@@ -73,9 +93,9 @@
                 android:id="@+id/headerAlmostThere"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:text="@string/header_almost_there"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/accent"
                 android:visibility="gone" />
@@ -84,7 +104,8 @@
                 android:id="@+id/txtAlmostNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/almost_there_note"
                 android:textSize="12sp"
                 android:textColor="@color/text_secondary"
@@ -94,6 +115,7 @@
                 android:id="@+id/recyclerAlmost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:nestedScrollingEnabled="false" />
         </LinearLayout>
     </ScrollView>

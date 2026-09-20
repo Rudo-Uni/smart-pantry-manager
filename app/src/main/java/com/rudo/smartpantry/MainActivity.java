@@ -21,12 +21,16 @@ import com.rudo.smartpantry.model.PantryItem;
 import com.rudo.smartpantry.ui.AddEditItemActivity;
 import com.rudo.smartpantry.ui.NavBarHelper;
 import com.rudo.smartpantry.ui.PantryAdapter;
+import com.rudo.smartpantry.model.Recipe;
 import com.rudo.smartpantry.util.AppPreferences;
+import com.rudo.smartpantry.util.ExpiryStatus;
+import com.rudo.smartpantry.util.RecipeMatcher;
 
 import java.util.List;
 
 /**
  * The pantry list, and the app's launcher screen.
+ *
  * Shows every ingredient the user currently has, and is the starting point for
  * adding, editing and deleting them. The list is refreshed in onResume rather
  * than only in onCreate, so returning from the add or edit screen always shows
@@ -39,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     private RecyclerView recyclerView;
     private TextView emptyMessage;
     private TextView countLabel;
+    private TextView statItems;
+    private TextView statExpiring;
+    private TextView statRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
         recyclerView = findViewById(R.id.recyclerPantry);
         emptyMessage = findViewById(R.id.txtPantryEmpty);
         countLabel = findViewById(R.id.txtPantryCount);
+        statItems = findViewById(R.id.txtStatItems);
+        statExpiring = findViewById(R.id.txtStatExpiring);
+        statRecipes = findViewById(R.id.txtStatRecipes);
 
         adapter = new PantryAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -99,6 +109,33 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
         emptyMessage.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         countLabel.setText(getString(R.string.pantry_count, items.size()));
+
+        updateSummary(items);
+    }
+
+    /**
+     * Fills the summary card in the header.
+     *
+     * The recipe count reuses the same matcher the suggestions screen runs,
+     * so the two can never disagree about how many recipes are available.
+     */
+    private void updateSummary(List<PantryItem> items) {
+        int windowDays = AppPreferences.getExpiryWindowDays(this);
+
+        int expiringCount = 0;
+        for (PantryItem item : items) {
+            ExpiryStatus status = ExpiryStatus.of(item, windowDays);
+            if (status == ExpiryStatus.EXPIRING_SOON || status == ExpiryStatus.EXPIRED) {
+                expiringCount++;
+            }
+        }
+
+        List<Recipe> recipes = dataSource.getAllRecipesWithIngredients();
+        int available = RecipeMatcher.findSuggestedRecipes(recipes, items).size();
+
+        statItems.setText(String.valueOf(items.size()));
+        statExpiring.setText(String.valueOf(expiringCount));
+        statRecipes.setText(String.valueOf(available));
     }
 
     /** Tapping a row opens it for editing, identified by its database id. */

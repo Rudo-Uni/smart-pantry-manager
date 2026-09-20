@@ -11,15 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/primary"
-        android:padding="16dp">
+        android:background="@drawable/bg_header"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp">
 
         <TextView
             android:id="@+id/txtFormTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_add_item"
-            android:textSize="22sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="@color/white" />
     </LinearLayout>
@@ -27,85 +30,102 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="20dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:background="@drawable/bg_card"
+            android:elevation="2dp"
+            android:padding="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_name"
-                android:textSize="14sp"
+                android:textSize="13sp"
+                android:textStyle="bold"
                 android:textColor="@color/text_primary" />
 
             <EditText
                 android:id="@+id/editName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_field"
+                android:padding="14dp"
                 android:hint="@string/hint_name"
                 android:inputType="textCapWords"
                 android:maxLength="60"
+                android:textSize="15sp"
                 android:autofillHints="name" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:text="@string/label_quantity"
-                android:textSize="14sp"
+                android:textSize="13sp"
+                android:textStyle="bold"
                 android:textColor="@color/text_primary" />
 
             <EditText
                 android:id="@+id/editQuantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_field"
+                android:padding="14dp"
                 android:hint="@string/hint_quantity"
                 android:inputType="numberDecimal"
                 android:maxLength="10"
+                android:textSize="15sp"
                 android:autofillHints="" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:text="@string/label_unit"
-                android:textSize="14sp"
+                android:textSize="13sp"
+                android:textStyle="bold"
                 android:textColor="@color/text_primary" />
 
             <Spinner
                 android:id="@+id/spinnerUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/bg_card"
-                android:padding="12dp" />
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_field"
+                android:padding="14dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:text="@string/label_expiry"
-                android:textSize="14sp"
+                android:textSize="13sp"
+                android:textStyle="bold"
                 android:textColor="@color/text_primary" />
 
             <TextView
                 android:id="@+id/txtExpiryValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/bg_card"
-                android:padding="12dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_field"
+                android:padding="14dp"
                 android:text="@string/no_expiry_set"
+                android:textSize="15sp"
                 android:textColor="@color/text_secondary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -113,26 +133,38 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:text="@string/choose_date" />
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_field"
+                    android:text="@string/choose_date"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/primary" />
 
                 <Button
                     android:id="@+id/btnClearDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/clear_date" />
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/bg_field"
+                    android:text="@string/clear_date"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnSaveItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/bg_button_primary"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
                 android:text="@string/save"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary" />
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
 

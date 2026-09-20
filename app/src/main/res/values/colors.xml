@@ -19,4 +19,13 @@
     <color name="divider">#E2E0DA</color>
     <color name="danger">#C1121F</color>
     <color name="nav_background">#FFFFFF</color>
+
+    <!-- Redesign palette -->
+    <color name="header_top">#12302A</color>
+    <color name="header_bottom">#2D6A4F</color>
+    <color name="panel_dark">#1C4437</color>
+    <color name="header_subtle">#A8C9B8</color>
+    <color name="pill_background">#E3F0E8</color>
+    <color name="pill_accent_background">#FBEEDF</color>
+    <color name="pill_text">#2D6A4F</color>
 </resources>

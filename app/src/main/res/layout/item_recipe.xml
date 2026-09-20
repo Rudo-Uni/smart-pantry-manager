@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg_card"
-    android:padding="14dp"
-    android:layout_marginBottom="8dp"
+    android:elevation="2dp"
+    android:padding="16dp"
+    android:layout_marginBottom="10dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -15,7 +16,7 @@
         android:id="@+id/txtRecipeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary" />
 
@@ -23,23 +24,35 @@
         android:id="@+id/txtRecipeDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         android:textSize="13sp"
+        android:lineSpacingExtra="2dp"
         android:textColor="@color/text_secondary" />
 
     <TextView
         android:id="@+id/txtRecipeMeta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_pill"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:textSize="12sp"
-        android:textColor="@color/primary" />
+        android:textStyle="bold"
+        android:textColor="@color/pill_text" />
 
     <TextView
         android:id="@+id/txtRecipeMissing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_pill_accent"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:textSize="12sp"
         android:textStyle="bold"
         android:textColor="@color/accent"

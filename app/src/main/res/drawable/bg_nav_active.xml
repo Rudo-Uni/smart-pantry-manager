@@ -1,0 +1,6 @@
+<!-- Highlight behind the navigation icon for the current screen. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/pill_background" />
+    <corners android:radius="999dp" />
+</shape>

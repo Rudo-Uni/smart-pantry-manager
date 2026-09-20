@@ -1,0 +1,6 @@
+<!-- Raised panel that sits over the header gradient. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/panel_dark" />
+    <corners android:radius="18dp" />
+</shape>

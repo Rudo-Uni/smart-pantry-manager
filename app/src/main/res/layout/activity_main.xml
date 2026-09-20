@@ -7,39 +7,143 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Header -->
+    <!-- Header: gradient panel carrying the title and a summary card. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/primary"
-        android:padding="16dp">
+        android:background="@drawable/bg_header"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_pantry"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
+            android:text="@string/greeting"
+            android:textSize="13sp"
+            android:textColor="@color/header_subtle" />
 
         <TextView
-            android:id="@+id/txtPantryCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textSize="13sp"
-            android:textColor="#CFE3D8" />
+            android:text="@string/title_pantry"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+
+        <!-- Summary card, echoing the reference design's stat block. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_card_dark"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtStatItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stat_ingredients"
+                    android:textSize="11sp"
+                    android:textColor="@color/header_subtle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtStatExpiring"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stat_expiring"
+                    android:textSize="11sp"
+                    android:textColor="@color/header_subtle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtStatRecipes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stat_can_make"
+                    android:textSize="11sp"
+                    android:textColor="@color/header_subtle" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnAddItem"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/add_ingredient"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/accent" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/txtPantryCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary" />
+
+        <Button
+            android:id="@+id/btnAddItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_accent"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:text="@string/add_ingredient"
+            android:textSize="13sp"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
     <!-- List area: the empty message sits behind the list and is shown
          only when there is nothing to display. -->
@@ -47,8 +151,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPantry"
@@ -64,6 +168,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="24dp"
+            android:lineSpacingExtra="4dp"
             android:text="@string/pantry_empty"
             android:textSize="15sp"
             android:textColor="@color/text_secondary"

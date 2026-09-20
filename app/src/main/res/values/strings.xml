@@ -90,4 +90,11 @@
     <string name="cook_failed">Could not update the pantry</string>
     <string name="cook_unavailable">You do not have everything for this recipe yet</string>
     <string name="cook_nothing_to_change">Nothing in your pantry needs adjusting for this recipe</string>
+
+
+    <!-- Redesign -->
+    <string name="greeting">Welcome back</string>
+    <string name="stat_ingredients">Ingredients</string>
+    <string name="stat_expiring">Expiring soon</string>
+    <string name="stat_can_make">Can make</string>
 </resources>

@@ -10,43 +10,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/primary"
-        android:padding="16dp">
+        android:background="@drawable/bg_header"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_settings"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
+            android:text="@string/settings_subtitle"
+            android:textSize="13sp"
+            android:textColor="@color/header_subtle" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="@string/settings_subtitle"
-            android:textSize="13sp"
-            android:textColor="#CFE3D8" />
+            android:text="@string/title_settings"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="20dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/bg_card"
-                android:padding="14dp">
+                android:elevation="2dp"
+                android:padding="18dp">
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchAlmostThere"
@@ -54,12 +59,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/setting_almost_there"
                     android:textSize="15sp"
+                    android:textStyle="bold"
                     android:textColor="@color/text_primary" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
                     android:text="@string/setting_almost_there_desc"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
@@ -68,10 +75,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="14dp"
                 android:orientation="vertical"
                 android:background="@drawable/bg_card"
-                android:padding="14dp">
+                android:elevation="2dp"
+                android:padding="18dp">
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchExpiryAlerts"
@@ -79,12 +87,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/setting_expiry_alerts"
                     android:textSize="15sp"
+                    android:textStyle="bold"
                     android:textColor="@color/text_primary" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
                     android:text="@string/setting_expiry_alerts_desc"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
@@ -92,26 +102,34 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/setting_expiry_window"
                     android:textSize="13sp"
+                    android:textStyle="bold"
                     android:textColor="@color/text_primary" />
 
                 <Spinner
                     android:id="@+id/spinnerExpiryDays"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_field"
+                    android:padding="14dp" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnClearPantry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_button_danger"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
                 android:text="@string/clear_pantry"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/danger" />
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
 
