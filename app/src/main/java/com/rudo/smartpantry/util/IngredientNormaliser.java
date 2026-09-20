@@ -9,15 +9,13 @@ import java.util.Set;
 
 /**
  * Turns messily written ingredient names and units into a canonical form so
- * that the strict-matching rule can compare them reliably.
- *
+ *that the strict-matching rule can compare them reliably.
  * Real users do not type consistently. A pantry holding "2 Large Tomatoes"
  * should satisfy a recipe asking for "tomato", and 500 g of flour should
  * satisfy a recipe asking for 0.5 kg. A plain string comparison fails both
  * cases, so names are folded to a singular lower-case form with descriptive
  * filler removed, and quantities are converted to a base unit before being
  * compared.
- *
  * This deliberately stops short of natural language processing. It handles the
  * common English plural patterns and the household units a pantry app needs,
  * and nothing further.
@@ -194,6 +192,19 @@ public final class IngredientNormaliser {
     public static double toBaseAmount(double quantity, String unit) {
         Double factor = UNIT_TO_BASE.get(canonicalUnit(unit));
         return factor != null ? quantity * factor : quantity;
+    }
+
+    /**
+     * Converts an amount in base units back into a named unit, the inverse of
+     * toBaseAmount. Used when writing a reduced quantity back to the pantry in
+     * whatever unit the entry was originally recorded in.
+     */
+    public static double fromBaseAmount(double baseAmount, String unit) {
+        Double factor = UNIT_TO_BASE.get(canonicalUnit(unit));
+        if (factor == null || factor == 0d) {
+            return baseAmount;
+        }
+        return baseAmount / factor;
     }
 
     /**
