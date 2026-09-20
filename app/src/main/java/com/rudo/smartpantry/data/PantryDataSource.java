@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
+import com.rudo.smartpantry.util.RecipeConsumer;
 import com.rudo.smartpantry.model.PantryItem;
 import com.rudo.smartpantry.model.Recipe;
 import com.rudo.smartpantry.model.RecipeIngredient;
@@ -16,11 +16,9 @@ import java.util.List;
 
 /**
  * Opens, closes and queries the Smart Pantry database.
- *
  * Every activity that touches data goes through this class rather than talking
  * to SQLite directly, which keeps the SQL in one place and lets the screens
  * work purely with model objects.
- *
  * Callers must call open() before use and close() when finished, normally in
  * onResume and onPause respectively.
  */
@@ -70,7 +68,6 @@ public class PantryDataSource {
 
     /**
      * Overwrites an existing pantry item, matched on its id.
-     *
      * @return true when exactly one row was changed
      */
     public boolean updatePantryItem(PantryItem item) {
@@ -266,6 +263,49 @@ public class PantryDataSource {
 
     // Internal helpers
 
+    /**
+     * Applies a consumption plan after the user confirms they cooked a recipe.
+     * Every removal and reduction is written inside a single transaction. A
+     * recipe touches several pantry entries at once, and applying only some of
+     * them would leave the pantry describing a meal that was never cooked, so
+     * the whole set either succeeds or none of it does.
+     * @return true when the pantry was updated
+     */
+    public boolean applyConsumption(RecipeConsumer.ConsumptionPlan plan) {
+        if (plan == null || !plan.hasChanges()) {
+            return false;
+        }
+
+        boolean didSucceed = false;
+        database.beginTransaction();
+        try {
+            for (RecipeConsumer.Removal removal : plan.getRemovals()) {
+                database.delete(
+                        PantryDBHelper.TABLE_PANTRY_ITEM,
+                        PantryDBHelper.COL_PANTRY_ID + " = ?",
+                        new String[]{String.valueOf(removal.getItemId())});
+            }
+
+            for (RecipeConsumer.Reduction reduction : plan.getReductions()) {
+                ContentValues values = new ContentValues();
+                values.put(PantryDBHelper.COL_PANTRY_QUANTITY, reduction.getNewQuantity());
+                database.update(
+                        PantryDBHelper.TABLE_PANTRY_ITEM,
+                        values,
+                        PantryDBHelper.COL_PANTRY_ID + " = ?",
+                        new String[]{String.valueOf(reduction.getItemId())});
+            }
+
+            database.setTransactionSuccessful();
+            didSucceed = true;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to apply recipe consumption", e);
+        } finally {
+            // Without a successful marker this rolls the whole set back.
+            database.endTransaction();
+        }
+        return didSucceed;
+    }
 
     private ContentValues pantryValues(PantryItem item) {
         ContentValues values = new ContentValues();

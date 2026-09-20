@@ -21,12 +21,12 @@ import com.rudo.smartpantry.model.PantryItem;
 import com.rudo.smartpantry.ui.AddEditItemActivity;
 import com.rudo.smartpantry.ui.NavBarHelper;
 import com.rudo.smartpantry.ui.PantryAdapter;
+import com.rudo.smartpantry.util.AppPreferences;
 
 import java.util.List;
 
 /**
  * The pantry list, and the app's launcher screen.
- *
  * Shows every ingredient the user currently has, and is the starting point for
  * adding, editing and deleting them. The list is refreshed in onResume rather
  * than only in onCreate, so returning from the add or edit screen always shows
@@ -88,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     /** Reloads from the database and switches between the list and the empty message. */
     private void refreshList() {
         List<PantryItem> items = dataSource.getAllPantryItems();
+
+        // Read the preferences once per refresh rather than once per row.
+        adapter.setExpiryPreferences(
+                AppPreferences.isExpiryAlertsEnabled(this),
+                AppPreferences.getExpiryWindowDays(this));
         adapter.setItems(items);
 
         boolean isEmpty = items.isEmpty();

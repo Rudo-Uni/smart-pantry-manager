@@ -72,4 +72,22 @@
     <string name="clear_pantry_title">Clear pantry</string>
     <string name="clear_pantry_message">Remove every ingredient from your pantry? This cannot be undone.</string>
     <string name="pantry_cleared">Pantry cleared</string>
+
+    <!-- Expiry alerts -->
+    <string name="expires_today">Expires today</string>
+    <string name="expires_tomorrow">Expires tomorrow</string>
+    <string name="expires_in_days">Expires in %1$d days</string>
+    <string name="expired_today">Expired today</string>
+    <string name="expired_days_ago">Expired %1$d days ago</string>
+    <string name="expires_on">Expires %1$s</string>
+
+    <!-- Cooking a recipe -->
+    <string name="cook_recipe">I made this</string>
+    <string name="cook_confirm_title">Update your pantry</string>
+    <string name="cook_confirm_message">Cooking %1$s will make these changes:\n\n%2$s</string>
+    <string name="cook_confirm_button">Update pantry</string>
+    <string name="cook_done">Pantry updated</string>
+    <string name="cook_failed">Could not update the pantry</string>
+    <string name="cook_unavailable">You do not have everything for this recipe yet</string>
+    <string name="cook_nothing_to_change">Nothing in your pantry needs adjusting for this recipe</string>
 </resources>

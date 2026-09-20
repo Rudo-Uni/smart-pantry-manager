@@ -3,11 +3,14 @@ package com.rudo.smartpantry.ui;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -19,18 +22,21 @@ import com.rudo.smartpantry.data.PantryDataSource;
 import com.rudo.smartpantry.model.PantryItem;
 import com.rudo.smartpantry.model.Recipe;
 import com.rudo.smartpantry.model.RecipeIngredient;
+import com.rudo.smartpantry.util.RecipeConsumer;
+import com.rudo.smartpantry.util.RecipeMatcher;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * Shows one recipe in full: its ingredients and its method.
- *
  * Each ingredient is marked according to whether the user currently holds it,
  * which makes the strict-matching rule visible at the level of a single
  * recipe rather than only in the suggestions list.
- *
+ * When the user has everything a recipe needs they can record that they
+ * cooked it, and the ingredients are deducted from their pantry.
  * Ingredient and step rows are built in code rather than declared in the
  * layout, because their number varies from one recipe to the next.
  */
@@ -40,6 +46,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_ID = "com.rudo.smartpantry.RECIPE_ID";
 
     private PantryDataSource dataSource;
+    private Button cookButton;
+    private Recipe currentRecipe;
     private int recipeId = -1;
 
     @Override
@@ -55,6 +63,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         dataSource = new PantryDataSource(this);
         recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, -1);
+
+        cookButton = findViewById(R.id.btnCookRecipe);
+        cookButton.setOnClickListener(v -> confirmCooked());
 
         NavBarHelper.setup(this, NavBarHelper.Screen.RECIPES);
     }
@@ -73,20 +84,76 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void displayRecipe() {
-        Recipe recipe = dataSource.getRecipe(recipeId);
-        if (recipe == null) {
+        currentRecipe = dataSource.getRecipe(recipeId);
+        if (currentRecipe == null) {
             Toast.makeText(this, R.string.error_save_failed, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        ((TextView) findViewById(R.id.txtDetailName)).setText(recipe.getName());
-        ((TextView) findViewById(R.id.txtDetailDescription)).setText(recipe.getDescription());
+        ((TextView) findViewById(R.id.txtDetailName)).setText(currentRecipe.getName());
+        ((TextView) findViewById(R.id.txtDetailDescription))
+                .setText(currentRecipe.getDescription());
         ((TextView) findViewById(R.id.txtDetailPrep))
-                .setText(getString(R.string.prep_time, recipe.getPrepMinutes()));
+                .setText(getString(R.string.prep_time, currentRecipe.getPrepMinutes()));
 
-        buildIngredientRows(recipe);
-        buildStepRows(recipe);
+        buildIngredientRows(currentRecipe);
+        buildStepRows(currentRecipe);
+        updateCookButton();
+    }
+
+    /**
+     * The cook button is only offered when the strict-matching rule says the
+     * user can actually make this recipe. Running the matcher over a list of
+     * one reuses exactly the logic behind the suggestions list, so the button
+     * can never disagree with what that screen showed.
+     */
+    private void updateCookButton() {
+        List<PantryItem> pantry = dataSource.getAllPantryItems();
+        boolean canMake = !RecipeMatcher.findSuggestedRecipes(
+                Collections.singletonList(currentRecipe), pantry).isEmpty();
+
+        cookButton.setEnabled(canMake);
+        cookButton.setAlpha(canMake ? 1f : 0.4f);
+        cookButton.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Works out what cooking this recipe would take out of the pantry and
+     * shows it to the user before anything is written.
+     */
+    private void confirmCooked() {
+        List<PantryItem> pantry = dataSource.getAllPantryItems();
+
+        boolean canMake = !RecipeMatcher.findSuggestedRecipes(
+                Collections.singletonList(currentRecipe), pantry).isEmpty();
+        if (!canMake) {
+            Toast.makeText(this, R.string.cook_unavailable, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RecipeConsumer.ConsumptionPlan plan = RecipeConsumer.plan(currentRecipe, pantry);
+        if (!plan.hasChanges()) {
+            Toast.makeText(this, R.string.cook_nothing_to_change, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.cook_confirm_title)
+                .setMessage(getString(R.string.cook_confirm_message,
+                        currentRecipe.getName(), plan.describe()))
+                .setPositiveButton(R.string.cook_confirm_button, (dialog, which) -> {
+                    if (dataSource.applyConsumption(plan)) {
+                        Toast.makeText(this, R.string.cook_done, Toast.LENGTH_SHORT).show();
+                        // Reload so the ingredient marks and the button reflect
+                        // the pantry as it now stands.
+                        displayRecipe();
+                    } else {
+                        Toast.makeText(this, R.string.cook_failed, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     /** Lists the ingredients, marking each as held or missing. */
